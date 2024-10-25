@@ -1,0 +1,38 @@
+from flask import Flask, request, jsonify
+import ast
+
+app = Flask(_name_)
+
+# Example conditional rules (in a real scenario, these might be stored in a database)
+rules = {
+    "age_check": "age >= 18",
+    "income_check": "income > 50000",
+    "spend_check": "spend < 20000",
+    "department_check": "department == 'Finance'"
+}
+
+# Function to evaluate user attributes using AST
+def evaluate_rule(rule, user_data):
+    tree = ast.parse(rule, mode='eval')
+    code = compile(tree, '<string>', 'eval')
+    return eval(code, {}, user_data)
+
+@app.route('/api/check-eligibility', methods=['POST'])
+def check_eligibility():
+    user_data = request.json
+
+    # Evaluate each rule
+    eligible = True
+    for rule_name, rule_expression in rules.items():
+        if not evaluate_rule(rule_expression, user_data):
+            eligible = False
+            break
+
+    # Response
+    if eligible:
+        return jsonify({"message": "User is eligible."})
+    else:
+        return jsonify({"message": "User is not eligible."})
+
+if _name_ == '_main_':
+    app.run(debug=True)
