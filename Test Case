@@ -1,0 +1,12 @@
+# Test rule creation
+rule = create_rule("age > 30 AND department = 'Sales'")
+print(rule)  # Inspect AST structure
+
+# Test rule combination
+combined_rule = combine_rules(["age > 30", "department = 'Sales'", "salary > 50000"], "AND")
+print(combined_rule)  # Combined AST
+
+# Test evaluation
+user_data = {"age": 35, "department": "Sales", "salary": 60000}
+result = evaluate_rule(combined_rule, user_data)
+print(result)  # Expected: True or False based on conditions
